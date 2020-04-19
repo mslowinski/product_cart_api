@@ -1,6 +1,6 @@
 # Local run with yarn
 - Copy .env.exmaple into .env file.
-- Install node modules and run application server:
+- Install node modules:
 ```
 yarn install
 ```
