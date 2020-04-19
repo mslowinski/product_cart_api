@@ -1,0 +1,402 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://localhost:3000"
+    }
+  ],
+  "info": {
+    "description": "Simple REST Api to manage products and carts",
+    "version": "1.0.0",
+    "title": "Product-Cart API",
+    "termsOfService": "http://Swagger.io/terms",
+    "contact": {
+      "email": "combat80@o2.pl"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "Cart",
+      "description": "Cart resources"
+    }
+  ],
+  "paths": {
+    "/cart/{cart_id}": {
+      "get": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Returns Cart resource",
+        "description": "Returns Cart resource with cart_id if exists ",
+        "operationId": "getCart",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "ID of cart that needs to be fetched",
+            "required": true,
+            "schema": {
+              "type": null,
+              "format": null
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successfull operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": "449e8a45-a9f8-47de-9d90-39e83ba6c2d4",
+                  "products": [],
+                  "totalAmount": 0,
+                  "currency": "EUR",
+                  "checkoutAmount": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart": {
+      "post": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Create an empty Cart",
+        "description": "Create and returns a new Cart resource",
+        "operationId": "createEmptyCart",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": "449e8a45-a9f8-47de-9d90-39e83ba6c2d4",
+                  "products": [],
+                  "totalAmount": 0,
+                  "currency": "EUR",
+                  "checkoutAmount": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cart/{cart_id}/add": {
+      "post": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Add products to existing Cart",
+        "description": "Add products to cart.products array in existing Cart. If product exists, quantity should be increased",
+        "operationId": "addProducts",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "ID of cart that needs to be fetched",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": "449e8a45-a9f8-47de-9d90-39e83ba6c2d4",
+                  "products": [
+                    {
+                      "id": "1",
+                      "name": "Product 1",
+                      "price": {
+                        "value": 5,
+                        "currency": "EUR"
+                      },
+                      "quantity": 2,
+                      "description": "Product 1 description"
+                    },
+                    {
+                      "id": "2",
+                      "name": "Product 2",
+                      "price": {
+                        "value": 10,
+                        "currency": "EUR"
+                      },
+                      "quantity": 1,
+                      "description": "Product 2 description"
+                    }
+                  ],
+                  "totalAmount": 20,
+                  "currency": "EUR",
+                  "checkoutAmount": ""
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductList"
+              },
+              "example": {
+                "products": [
+                  {
+                    "id": "1",
+                    "name": "Product 1",
+                    "price": {
+                      "value": 5,
+                      "currency": "EUR"
+                    },
+                    "quantity": 2,
+                    "description": "Product 1 description"
+                  },
+                  {
+                    "id": "2",
+                    "name": "Product 2",
+                    "price": {
+                      "value": 10,
+                      "currency": "EUR"
+                    },
+                    "quantity": 1,
+                    "description": "Product 2 description"
+                  }
+                ]
+              }
+            }
+          }
+
+        }
+      }
+    },
+    "/cart/{cart_id}/remove": {
+      "post": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Remove products from existing Cart",
+        "description": "Decrease quantity of existing product, remove it from product list if quantity <= 0",
+        "operationId": "removeProducts",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "ID of cart that needs to be fetched",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": "449e8a45-a9f8-47de-9d90-39e83ba6c2d4",
+                  "products": [
+                    {
+                      "id": "1",
+                      "name": "Product 1",
+                      "price": {
+                        "value": 5,
+                        "currency": "EUR"
+                      },
+                      "quantity": 1,
+                      "description": "Product 1 description"
+                    }
+                  ],
+                  "totalAmount": 5,
+                  "currency": "EUR",
+                  "checkoutAmount": ""
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemovedProductsIds"
+              },
+              "example": {
+                "removed_products_ids": ["1","2"]
+              }
+            }
+          }
+
+        }
+      }
+    },
+    "/cart/{cart_id}/checkout/{rate}": {
+      "get": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Checkout products in existing Cart",
+        "description": "Fetch current rates from external service, calculate and update checkoutAmount",
+        "operationId": "removeProducts",
+        "parameters": [
+          {
+            "name": "cart_id",
+            "in": "path",
+            "description": "ID of cart that needs to be fetched",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rate",
+            "in": "path",
+            "description": "Rate symbol, e.g. CHF",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Cart"
+                },
+                "example": {
+                  "id": "449e8a45-a9f8-47de-9d90-39e83ba6c2d4",
+                  "products": [
+                    {
+                      "id": "1",
+                      "name": "Product 1",
+                      "price": {
+                        "value": 5,
+                        "currency": "EUR"
+                      },
+                      "quantity": 1,
+                      "description": "Product 1 description"
+                    }
+                  ],
+                  "totalAmount": 5,
+                  "currency": "EUR",
+                  "checkoutAmount": "10,6CHF"
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+  },
+  "components": {
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Access token os missing or invalid"
+      }
+    },
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number",
+                "format": "int32"
+              },
+              "currency": {
+                "type": "string"
+              }
+            }
+          },
+          "quantity": {
+            "type": "number",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "price", "quantity"]
+      },
+      "ProductList": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          }
+        }
+      },
+      "RemovedProductsIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "description": "product id"
+        }
+      },
+      "Cart": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "UUID v4"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Product"
+            }
+          },
+          "totalAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quantity": {
+            "title": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["id", "products", "quantity"]
+      }
+    }
+  }
+}
